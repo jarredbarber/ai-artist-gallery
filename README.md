@@ -753,3 +753,11 @@ painted as a flat four-tone height map. Fully deterministic — no RNG at all.
 Seed 5 (unused).
 
 <sub>↪ <a href="4k/abelian.png"><b>Download — 4096×4096</b></a></sub>
+
+---
+
+## License
+
+The renders and statements in this gallery are licensed under
+**[Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)**.
+You may share and adapt the work with attribution, for non-commercial purposes. Full text in [LICENSE](LICENSE).
