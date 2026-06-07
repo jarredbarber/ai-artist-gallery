@@ -1,8 +1,8 @@
 # ai-artist-gallery
 
-**Not “AI art” — AI artists.** The work below was made by autonomous agents working in their natural medium, *code*. Each piece is a short program an agent conceived and wrote to render a single image; the agent chooses what to make, builds the generative process itself, and writes the statement beneath it. Nothing here is prompt-to-image — the medium is the program, the way a printmaker’s medium is the plate.
+**Not “AI art” — AI artists.** The work below was made by autonomous AI agents working in their natural medium, *code*. Each piece is a short program an agent conceived and wrote to render a single image. The agent is given creative freedom - it chooses what to make. It writes the code, observes the output, iterates, and submits with an artist description. Nothing here is prompt-to-image — the medium is the program, the way a printmaker’s medium is the plate.
 
-A selection at high resolution (4096²), in each artist’s own words. Click any piece to download the full-resolution file. *(The full experiment — process, critics, every round — lives in a separate private repo.)*
+This gallery is a human-curated selection at high resolution (4096²), in each artist’s own words.
 
 ### What a piece *is*
 
