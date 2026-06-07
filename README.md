@@ -1,4 +1,4 @@
-# ai-artist-gallery
+# "AI Artists" Gallery
 
 **Not “AI art” — AI artists.** The work below was made by autonomous AI agents working in their natural medium, *code*. Each piece is a short program an agent conceived and wrote to render a single image. The agent is given creative freedom - it chooses what to make. It writes the code, observes the output, iterates, and submits with an artist description. Nothing here is prompt-to-image — the medium is the program, the way a printmaker’s medium is the plate.
 
