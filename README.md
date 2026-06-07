@@ -4,76 +4,6 @@
 
 This gallery is a human-curated selection at high resolution (4096²), in each artist’s own words.
 
-### What a piece *is*
-
-To make “the medium is the program” concrete: here is one of the works below — [**Abelian**](#abelian) — in full. It is the shortest in this selection, 47 lines of logic, and the rule it runs is a single sentence. The agent wrote all of it — the algorithm, the work-queue, the palette — and rendering it once, deterministically, produces the image.
-
-```ts
-import { render } from "#lib";
-
-// Abelian sandpile. Drop N grains on the centre cell of a square lattice; any
-// cell holding ≥4 grains topples one grain to each of its four neighbours, until
-// every cell holds 0–3. That's the whole law — and "abelian" means the final
-// pattern is identical no matter what order you topple in, fully determined by N.
-
-const MARGIN = 64;
-const GW = 1024 + 2 * MARGIN;     // working grid (cropped to 1024 at the end)
-const N = 300_000;              // grains dropped on the centre cell
-
-await render(
-  { size: 1024, seed: 5, background: "#000000" },
-  (ctx) => {
-    const h = new Int32Array(GW * GW);
-    const cx = GW >> 1, cy = GW >> 1;
-    const ci = cy * GW + cx;
-    h[ci] = N;
-
-    // Relax with a work-queue that only ever visits UNSTABLE cells (≥4).
-    // A flag keeps each cell in the stack at most once, so the queue can never
-    // exceed the grid; abelian-ness guarantees the result is order-independent.
-    const flag = new Uint8Array(GW * GW);
-    const stack = new Int32Array(GW * GW);
-    let sp = 0;
-    stack[sp++] = ci; flag[ci] = 1;
-
-    while (sp > 0) {
-      const i = stack[--sp];
-      flag[i] = 0;
-      const v = h[i];
-      if (v < 4) continue;
-      const t = v >> 2;        // bulk-topple floor(v/4) grains to each neighbour
-      h[i] = v & 3;
-      let nb = i - 1;  h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
-      nb = i + 1;      h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
-      nb = i - GW;     h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
-      nb = i + GW;     h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
-    }
-
-    // Four heights → four matte tones: a mineral set (bone, sage, terracotta, ink).
-    const PAL = [
-      [231, 224, 205], // 0 — bone (empty ground)
-      [108, 142, 134], // 1 — sage
-      [181, 92, 58],   // 2 — terracotta
-      [33, 38, 47],    // 3 — ink
-    ];
-
-    const img = ctx.createImageData(1024, 1024);
-    const d = img.data;
-    for (let py = 0; py < 1024; py++) {
-      const sy = py + MARGIN;
-      for (let px = 0; px < 1024; px++) {
-        const sx = px + MARGIN;
-        const c = PAL[h[sy * GW + sx]];
-        const o = (py * 1024 + px) * 4;
-        d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255;
-      }
-    }
-    ctx.putImageData(img, 0, 0);
-  },
-);
-```
-
-
 ---
 
 ## Recursive Subdivision Interference
@@ -823,6 +753,77 @@ Seed 5 (unused).
 
 <sub>↪ <a href="4k/abelian.png"><b>Download — 4096×4096</b></a></sub>
 
+---
+
+
+## What a piece *is*
+
+To make “the medium is the program” concrete: here is one of the works below — [**Abelian**](#abelian) — in full. It is the shortest in this selection, 47 lines of logic, and the rule it runs is a single sentence. The agent wrote all of it — the algorithm, the work-queue, the palette — and rendering it once, deterministically, produces the image.
+
+```ts
+import { render } from "#lib";
+
+// Abelian sandpile. Drop N grains on the centre cell of a square lattice; any
+// cell holding ≥4 grains topples one grain to each of its four neighbours, until
+// every cell holds 0–3. That's the whole law — and "abelian" means the final
+// pattern is identical no matter what order you topple in, fully determined by N.
+
+const MARGIN = 64;
+const GW = 1024 + 2 * MARGIN;     // working grid (cropped to 1024 at the end)
+const N = 300_000;              // grains dropped on the centre cell
+
+await render(
+  { size: 1024, seed: 5, background: "#000000" },
+  (ctx) => {
+    const h = new Int32Array(GW * GW);
+    const cx = GW >> 1, cy = GW >> 1;
+    const ci = cy * GW + cx;
+    h[ci] = N;
+
+    // Relax with a work-queue that only ever visits UNSTABLE cells (≥4).
+    // A flag keeps each cell in the stack at most once, so the queue can never
+    // exceed the grid; abelian-ness guarantees the result is order-independent.
+    const flag = new Uint8Array(GW * GW);
+    const stack = new Int32Array(GW * GW);
+    let sp = 0;
+    stack[sp++] = ci; flag[ci] = 1;
+
+    while (sp > 0) {
+      const i = stack[--sp];
+      flag[i] = 0;
+      const v = h[i];
+      if (v < 4) continue;
+      const t = v >> 2;        // bulk-topple floor(v/4) grains to each neighbour
+      h[i] = v & 3;
+      let nb = i - 1;  h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
+      nb = i + 1;      h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
+      nb = i - GW;     h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
+      nb = i + GW;     h[nb] += t; if (h[nb] >= 4 && !flag[nb]) { flag[nb] = 1; stack[sp++] = nb; }
+    }
+
+    // Four heights → four matte tones: a mineral set (bone, sage, terracotta, ink).
+    const PAL = [
+      [231, 224, 205], // 0 — bone (empty ground)
+      [108, 142, 134], // 1 — sage
+      [181, 92, 58],   // 2 — terracotta
+      [33, 38, 47],    // 3 — ink
+    ];
+
+    const img = ctx.createImageData(1024, 1024);
+    const d = img.data;
+    for (let py = 0; py < 1024; py++) {
+      const sy = py + MARGIN;
+      for (let px = 0; px < 1024; px++) {
+        const sx = px + MARGIN;
+        const c = PAL[h[sy * GW + sx]];
+        const o = (py * 1024 + px) * 4;
+        d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  },
+);
+```
 ---
 
 ## License
